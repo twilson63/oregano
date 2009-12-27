@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe 'namespace test' do
+describe 'configuration' do
   include Rack::Test::Methods
   
   def app
@@ -14,7 +14,7 @@ describe 'namespace test' do
     # Create Widget Config
     Oregano::Configuration.create do |c|
       c.name = "widget"
-      c.owner = "tom@jackhq.com"
+      c.openid = "tom@jackhq.com"
       c.access_key = "1234"
       c.body = { :test => true }
     end

@@ -5,16 +5,19 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'vendor', 'gems', 'en
 Bundler.require_env
 
 require 'sinatra/sequel'
+require 'lib/access_key_generator'
 
 class Oregano < Sinatra::Default
-
+  include KeyGenerator
+  
   set :database, ENV['DATABASE_URL'] || 'sqlite://oregano.db'
+  set :root, File.dirname(__FILE__)
 
   migration "create the config table" do
     database.create_table :configurations do
       primary_key :id
       string :name
-      string :owner
+      string :openid
       string :access_key
       text :data
 
@@ -23,7 +26,8 @@ class Oregano < Sinatra::Default
   
   class Configuration < Sequel::Model
     include Validatable
-    validates_presence_of :name, :owner, :access_key
+    validates_presence_of :name, :openid, :access_key
+    # Need to verify name is unique!!!
     
     def body=(var)
       self.data = var.to_yaml
@@ -32,6 +36,7 @@ class Oregano < Sinatra::Default
     def body
       YAML::load(self.data) unless self.data.nil?
     end
+    
        
   end
     
@@ -39,6 +44,17 @@ class Oregano < Sinatra::Default
     "Welcome to Oregano"
   end
   
+  get '/register' do
+    haml :register
+  end
+  
+  post '/register' do
+    # authenticate openid
+    # create config
+    configuration = Configuration.create(params.merge(:access_key => generate_key))
+    @access_key = configuration.access_key
+    haml :confirmation
+  end
 
   get '/:name' do |name|
     # Find Namespace
