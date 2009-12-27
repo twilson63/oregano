@@ -26,9 +26,16 @@ describe 'namespace test' do
     last_response.should be_ok
   end
   
+  it 'should not return widget without api key' do
+    get '/widget'
+    last_response.status.should == 401
+    Crack::JSON.parse(last_response.body)["error"].should == "invalid api key"
+  end
+  
+  
   it 'should return widget config' do
             
-    get '/widget'
+    get '/widget?api_key=1234'
     
     #last_response.body.should == "{\"test\":true}"
     Crack::JSON.parse(last_response.body)["test"].should be_true
@@ -36,14 +43,13 @@ describe 'namespace test' do
   
   it 'should set config param' do
     
-    post '/widget', '{"uri": "myuri.com"}'
-    
+    post '/widget?api_key=1234', '{"uri": "myuri.com"}'
     Crack::JSON.parse(last_response.body)["test"].should be_true
     Crack::JSON.parse(last_response.body)["uri"].should == "myuri.com"
   end
   
   it 'should set config params in nested levels' do
-    post '/widget', '{"database": { "uri": "uri.com", "user": "admin"}}'
+    post '/widget?api_key=1234', '{"database": { "uri": "uri.com", "user": "admin"}}'
     Crack::JSON.parse(last_response.body)["test"].should be_true
     Crack::JSON.parse(last_response.body)["database"]["uri"].should == "uri.com"
   end

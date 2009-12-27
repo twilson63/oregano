@@ -34,7 +34,7 @@ class Oregano < Sinatra::Default
     end
        
   end
-  
+    
   get '/' do
     "Welcome to Oregano"
   end
@@ -43,6 +43,8 @@ class Oregano < Sinatra::Default
   get '/:name' do |name|
     # Find Namespace
     configuration = Configuration.find(:name => name)
+    # authorize api
+    halt 401, '{"error":"invalid api key"}' unless configuration.access_key == params[:api_key]
     # Get Body and return it out
     configuration.body.to_json
   
@@ -52,6 +54,8 @@ class Oregano < Sinatra::Default
     x = request.body.read
     # Find Namespace
     configuration = Configuration.find(:name => name)
+    # authorize api
+    halt unless configuration.access_key == params[:api_key]
     # Set/Merge Hash to body and return it out
     configuration.body = configuration.body.merge(Crack::JSON.parse(x))
     configuration.save
