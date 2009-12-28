@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe 'register' do
+describe 'namespace' do
   include Rack::Test::Methods
   include Webrat::Matchers
   
@@ -8,23 +8,22 @@ describe 'register' do
     Oregano
   end
   
-  it "should provide a form to register" do
-    get '/register'
+  it "should provide a form to create namespace" do
+    get '/namespace'
     #puts last_response.body
-    last_response.should have_selector('form', :method => "post", :action => "/register")
+    last_response.should have_selector('form', :method => "post", :action => "/namespace")
     last_response.should have_selector('input', :type => "submit")
     last_response.should have_selector('input', :type => "text", :name => "name")
-    last_response.should have_selector('input', :type => "text", :name => "openid")
     
   end
   
   it "should allow for a post" do
-    post '/register', :name => "cloudrx", :openid => "jackhq.myopenid.com"
+    #@app.session = { :openid => "jackhq.myopenid.com"}
+    #set_cookie("rack.session={'openid' => 'jackhq.myopenid.com'}")
+    
+    post '/namespace', :name => "cloudrx"
+    puts last_request.cookies.inspect
     last_response.should have_selector('input', :type => "text", :name => "key")
   end
-  
-  it "should authenticate via openid"
-  
-  it "should not allow duplicate configuration names"
-  
+    
 end

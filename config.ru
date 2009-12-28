@@ -1,3 +1,3 @@
 require 'oregano'
 
-run Sinatra::Base
+run Oregano

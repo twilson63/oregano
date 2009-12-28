@@ -1,4 +1,5 @@
 gem "rack"
+gem "rack-openid"
 gem "sinatra"
 gem "sequel"
 gem 'haml'

@@ -7,7 +7,7 @@ describe Oregano::Configuration do
     Oregano::Configuration.each { |c| c.destroy }
     
     @config = Oregano::Configuration.new(  :name => "widget", 
-                          :openid => "tom@test.com", 
+                          :openid_identifier => "tom@test.com", 
                           :access_key => "1234")
     
   end

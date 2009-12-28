@@ -1,0 +1,9 @@
+%h1 Login
+%form{:method => "post", :action => '/login'}
+  %p
+    %label{:for => "openid_identifier"} Open ID
+    %br
+    %input{:type => "text", :name => "openid_identifier"}
+  %p
+    %input{:type => "submit", :value => "Login"}
+    

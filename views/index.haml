@@ -1,0 +1,14 @@
+%h1 Welcome to Oregano
+
+%p
+  In order to create a namespace you must first login with an Open ID.
+  
+%p
+  - unless session[:openid]
+    %a{:href => "/login"} Login
+  - else
+    = session[:openid]
+    %br
+    %a{:href => "/namespace" } Create Namespace
+    
+    

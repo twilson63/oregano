@@ -14,7 +14,7 @@ describe 'configuration' do
     # Create Widget Config
     Oregano::Configuration.create do |c|
       c.name = "widget"
-      c.openid = "tom@jackhq.com"
+      c.openid_identifier = "tom@jackhq.com"
       c.access_key = "1234"
       c.body = { :test => true }
     end
